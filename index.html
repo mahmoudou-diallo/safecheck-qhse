@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SafeCheck QHSE — Gestion Sécurité & Qualité</title>
+<meta name="description" content="Plateforme professionnelle de management QHSE pour la sécurité industrielle au Sénégal. Incidents, inspections, formations.">
+<meta name="theme-color" content="#0F172A">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23F97316'/%3E%3Cpath d='M16 5l10 5v8c0 6-10 10-10 10S6 24 6 18V10l10-5z' fill='none' stroke='white' stroke-width='2.5' stroke-linejoin='round'/%3E%3Cpath d='M12 16l3 3 6-6' fill='none' stroke='white' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <!-- SPLASH -->
+  <div id="splash">
+    <div class="splash-box">
+      <div class="splash-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#F97316" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          <path d="M9 12l2 2 4-4"/>
+        </svg>
+      </div>
+      <h1>SafeCheck QHSE</h1>
+      <p>Plateforme de management<br>Qualité — Hygiène — Sécurité — Environnement</p>
+      <div class="splash-form">
+        <input type="text" id="splashName" placeholder="Votre nom" maxlength="60" autocomplete="name">
+        <button id="splashGo" class="btn-primary">Accéder</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- LAYOUT -->
+  <div id="layout" class="hidden">
+    <aside id="sidebar">
+      <div class="sb-head">
+        <div class="sb-logo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            <path d="M9 12l2 2 4-4"/>
+          </svg>
+          <span>SafeCheck</span>
+        </div>
+      </div>
+      <nav class="sb-nav">
+        <button class="nb active" data-p="dashboard" onclick="go('dashboard')">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
+          <span>Dashboard</span>
+        </button>
+        <button class="nb" data-p="incidents" onclick="go('incidents')">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <span>Incidents</span>
+        </button>
+        <button class="nb" data-p="checklist" onclick="go('checklist')">
+          <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          <span>Checklist</span>
+        </button>
+        <button class="nb" data-p="training" onclick="go('training')">
+          <svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+          <span>Formation</span>
+        </button>
+        <button class="nb" data-p="reports" onclick="go('reports')">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          <span>Rapports</span>
+        </button>
+      </nav>
+      <div class="sb-user">
+        <div class="sb-avatar" id="sbAvatar">M</div>
+        <div class="sb-meta">
+          <span class="sb-name" id="sbName">Agent</span>
+          <span class="sb-role">Agent QHSE</span>
+        </div>
+        <button class="sb-edit" onclick="editName()" title="Modifier">
+          <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        </button>
+      </div>
+    </aside>
+
+    <div id="main">
+      <header id="topbar">
+        <button id="menuBtn" onclick="toggleMenu()" aria-label="Menu">
+          <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <div class="tb-title"><span id="pageTitle">Dashboard</span></div>
+        <div class="tb-right">
+          <span class="tb-date" id="tbDate"></span>
+          <span class="tb-badge" id="tbIncidents">0 incident</span>
+        </div>
+      </header>
+
+      <div id="pages">
+        <!-- ██ DASHBOARD ██ -->
+        <section id="p-dashboard" class="page active">
+          <div class="ph">
+            <h2>Dashboard</h2>
+            <p>Bonjour <strong id="welcomeUser">Agent</strong> — aperçu de vos indicateurs QHSE</p>
+          </div>
+          <div class="kpi-row">
+            <div class="kpi" style="--kc:#EF4444">
+              <div class="kpi-top">
+                <div class="kpi-ico" style="background:#FEF2F2"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+                <span class="kpi-num" id="dashIncidents">0</span>
+              </div>
+              <span class="kpi-lbl">Incidents du mois</span>
+              <span class="kpi-tr" id="dashIncTr">—</span>
+            </div>
+            <div class="kpi" style="--kc:#3B82F6">
+              <div class="kpi-top">
+                <div class="kpi-ico" style="background:#EFF6FF"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div>
+                <span class="kpi-num" id="dashInspections">0</span>
+              </div>
+              <span class="kpi-lbl">Inspections réalisées</span>
+              <span class="kpi-tr" id="dashInspTr">—</span>
+            </div>
+            <div class="kpi" style="--kc:#10B981">
+              <div class="kpi-top">
+                <div class="kpi-ico" style="background:#ECFDF5"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+                <span class="kpi-num" id="dashCompliance">0%</span>
+              </div>
+              <span class="kpi-lbl">Conformité</span>
+              <span class="kpi-tr" id="dashCompTr">—</span>
+            </div>
+            <div class="kpi" style="--kc:#F59E0B">
+              <div class="kpi-top">
+                <div class="kpi-ico" style="background:#FFFBEB"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg></div>
+                <span class="kpi-num" id="dashBadges">0</span>
+              </div>
+              <span class="kpi-lbl">Badges obtenus</span>
+              <span class="kpi-tr" id="dashBadgeTr">—</span>
+            </div>
+          </div>
+          <div class="charts-row">
+            <div class="chart-box">
+              <div class="chart-hdr">
+                <h3>Incidents par type</h3>
+                <span class="chart-period">Ce mois</span>
+              </div>
+              <canvas id="chartTypes" height="200"></canvas>
+            </div>
+            <div class="chart-box">
+              <div class="chart-hdr">
+                <h3>Tendance</h3>
+                <span class="chart-period">6 mois</span>
+              </div>
+              <canvas id="chartTrend" height="200"></canvas>
+            </div>
+          </div>
+          <div class="recent-box">
+            <div class="recent-hdr">
+              <h3>Activité récente</h3>
+              <button class="btn-ghost" onclick="go('incidents')">Voir tout</button>
+            </div>
+            <div id="recentList"><div class="empty">Aucune activité ce mois</div></div>
+          </div>
+        </section>
+
+        <!-- ██ INCIDENTS ██ -->
+        <section id="p-incidents" class="page">
+          <div class="ph">
+            <h2>Incidents</h2>
+            <p>Déclaration et suivi des incidents de sécurité</p>
+          </div>
+          <div class="inc-grid">
+            <div class="inc-form">
+              <h3>Nouvelle déclaration</h3>
+              <form id="incForm">
+                <div class="fg">
+                  <label>Type d'incident</label>
+                  <select id="fType" required>
+                    <option value="">— Sélectionner —</option>
+                    <option>Accident de travail</option>
+                    <option>Incident sans blessure</option>
+                    <option>Presque accident</option>
+                    <option>Non-conformité qualité</option>
+                    <option>Incident environnemental</option>
+                    <option>Défaillance équipement</option>
+                  </select>
+                </div>
+                <div class="fr">
+                  <div class="fg">
+                    <label>Date</label>
+                    <input type="date" id="fDate" required>
+                  </div>
+                  <div class="fg">
+                    <label>Gravité</label>
+                    <select id="fGrav">
+                      <option value="1">1 — Mineure</option>
+                      <option value="2">2 — Faible</option>
+                      <option value="3" selected>3 — Moyenne</option>
+                      <option value="4">4 — Grave</option>
+                      <option value="5">5 — Critique</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="fg">
+                  <label>Lieu</label>
+                  <input type="text" id="fLoc" placeholder="Atelier, chantier, bureau..." required>
+                </div>
+                <div class="fg">
+                  <label>Description</label>
+                  <textarea id="fDesc" rows="3" placeholder="Circonstances, conséquences..." required></textarea>
+                </div>
+                <div class="fg">
+                  <label>Action immédiate</label>
+                  <textarea id="fAction" rows="2" placeholder="Mesures prises..."></textarea>
+                </div>
+                <button type="submit" class="btn-primary">Enregistrer</button>
+              </form>
+            </div>
+            <div class="inc-list">
+              <h3>Historique</h3>
+              <div id="incList"><div class="empty">Aucun incident enregistré</div></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ██ CHECKLIST ██ -->
+        <section id="p-checklist" class="page">
+          <div class="ph">
+            <h2>Checklist sécurité</h2>
+            <p>Inspection des installations et équipements</p>
+          </div>
+          <div class="cl-meta" id="clMeta">
+            <div class="cl-stat"><span class="cl-val" id="clPct">0%</span><span class="cl-lbl">Progression</span></div>
+            <div class="cl-stat"><span class="cl-val" id="clDone">0/<span id="clTotal">0</span></span><span class="cl-lbl">Conformes</span></div>
+            <button class="btn-ghost" onclick="newChecklist()">Nouvelle inspection</button>
+          </div>
+          <div id="clGrid" class="cl-grid"></div>
+          <div class="cl-foot">
+            <div class="fg" style="flex:1;margin:0">
+              <label>Inspecteur</label>
+              <input type="text" id="clSign" placeholder="Nom complet" maxlength="80">
+            </div>
+            <button class="btn-primary" onclick="saveChecklist()">
+              <svg width="16" height="16" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+              Valider
+            </button>
+          </div>
+        </section>
+
+        <!-- ██ TRAINING ██ -->
+        <section id="p-training" class="page">
+          <div class="ph">
+            <h2>Formation HSE</h2>
+            <p>Testez vos connaissances en sécurité au travail</p>
+          </div>
+          <div id="trainIntro" class="train-intro">
+            <div class="ti-icon"><svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg></div>
+            <h3>Quiz HSE — 10 questions</h3>
+            <p>Évaluez vos connaissances en prévention des risques, réglementation QHSE et sécurité au travail.</p>
+            <div class="ti-stats">
+              <div><span id="tiBest">—</span><span>Meilleur</span></div>
+              <div><span id="tiAttempts">0</span><span>Tentatives</span></div>
+              <div><span id="tiBadge">—</span><span>Badge</span></div>
+            </div>
+            <button class="btn-primary" onclick="startQuiz()">
+              <svg width="16" height="16" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Commencer
+            </button>
+          </div>
+          <div id="quizWrap" class="hidden">
+            <div class="qz-hdr">
+              <div class="qz-bar"><div class="qz-fill" id="qzFill"></div></div>
+              <span id="qzCount">0/10</span>
+            </div>
+            <div class="qz-card">
+              <p class="qz-q" id="qzQ"></p>
+              <div class="qz-opts" id="qzOpts"></div>
+              <button class="btn-primary" id="qzNext" style="display:none" onclick="qzNext()">Suivante</button>
+            </div>
+            <div class="qz-result hidden" id="qzResult">
+              <div class="qr-ico"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+              <h3 id="qrTitle">Terminé</h3>
+              <p class="qr-sc" id="qrScore">0/10</p>
+              <p id="qrMsg"></p>
+              <div class="qr-badge hidden" id="qrBadge">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
+                <span id="qrBadgeName">Expert HSE</span>
+              </div>
+              <div class="qr-acts">
+                <button class="btn-primary" onclick="startQuiz()">Recommencer</button>
+                <button class="btn-ghost" onclick="closeQuiz()">Retour</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ██ REPORTS ██ -->
+        <section id="p-reports" class="page">
+          <div class="ph">
+            <h2>Rapports</h2>
+            <p>Exportez vos données QHSE</p>
+          </div>
+          <div class="rep-grid">
+            <div class="rep-card">
+              <div class="rep-ico" style="background:#FEF2F2;color:#EF4444"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+              <h3>Incidents</h3>
+              <p>Export des déclarations d'incidents</p>
+              <div class="rep-acts"><button class="btn-sm" onclick="exportJSON('incidents')">JSON</button><button class="btn-sm" onclick="exportCSV('incidents')">CSV</button></div>
+            </div>
+            <div class="rep-card">
+              <div class="rep-ico" style="background:#EFF6FF;color:#3B82F6"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div>
+              <h3>Inspections</h3>
+              <p>Export des checklists sécurité</p>
+              <div class="rep-acts"><button class="btn-sm" onclick="exportJSON('inspections')">JSON</button><button class="btn-sm" onclick="exportCSV('inspections')">CSV</button></div>
+            </div>
+            <div class="rep-card">
+              <div class="rep-ico" style="background:#ECFDF5;color:#10B981"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg></div>
+              <h3>Formation</h3>
+              <p>Export des résultats de quiz</p>
+              <div class="rep-acts"><button class="btn-sm" onclick="exportJSON('training')">JSON</button><button class="btn-sm" onclick="exportCSV('training')">CSV</button></div>
+            </div>
+            <div class="rep-card">
+              <div class="rep-ico" style="background:#F8FAFC;color:#64748B"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+              <h3>Export complet</h3>
+              <p>Toutes les données QHSE</p>
+              <div class="rep-acts"><button class="btn-sm" onclick="exportJSON('all')">JSON</button><button class="btn-sm" onclick="exportCSV('all')">CSV</button></div>
+            </div>
+          </div>
+          <div class="rep-actions">
+            <h3>Gestion</h3>
+            <button class="btn-sm" onclick="if(confirm('Effacer toutes les données ?')){localStorage.clear();location.reload()}">Effacer les données</button>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
